@@ -87,8 +87,8 @@ void sortByLastDigitThenDescending(int *arr, int size) {
 
 // Главное меню
 int main() {
-    int *arr = nullptr; // динамический массив
-    int size = 0; // размер массива
+    int *arr = nullptr; 
+    int size = 0; 
     int choise = 10;
 
     while (choise != 5) {
