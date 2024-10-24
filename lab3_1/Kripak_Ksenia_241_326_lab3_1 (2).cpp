@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string>
 using namespace std;
 
 // Пузырьковая сортировка
@@ -105,18 +105,20 @@ int main() {
         cin >> choice;
 
         if (choice == 1) {
-            int n;
             cout << "Enter the size of the numeric array (up to 1000): ";
+            int n;
             cin >> n;
             if (n > 1000) {
                 cout << "Error: the array size should not exceed 1000 elements.\n";
                 continue;
             }
 
-            int array[n];
+            int array[1000];
             cout << "Enter the elements of the array: ";
             for (int i = 0; i < n; i++) {
-                cin >> array[i];
+                int new_element;
+                cin >> new_element;
+                array[i] = new_element;
             }
 
             bubbleSort(array, n);
@@ -159,7 +161,7 @@ int main() {
                 continue;
             }
 
-            int array[n];
+            int array[1000];
             cout << "Enter the elements of the array: ";
             for (int i = 0; i < n; i++) {
                 cin >> array[i];
