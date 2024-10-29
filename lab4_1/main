@@ -1,0 +1,74 @@
+#include <iostream>
+#include <cstring>  // Для работы с C-строками
+
+// Проверка строки на палиндром
+bool isPalindrome(const char* str) {
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        if (str[i] != str[len - i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Поиск подстроки в строке
+int findSubstring(const char* str, const char* substr) {
+    const char* found = strstr(str, substr); // strstr возвращает указатель на найденную подстроку
+    if (found) {
+        return found - str;  // Возвращаем индекс найденной подстроки
+    } else {
+        return -1; // Если подстрока не найдена, возвращаем -1
+    }
+}
+
+// Шифрование методом сдвига (например, шифр Цезаря)
+void caesarCipher(char* str, int shift) {
+    int len = strlen(str);
+    for (int i = 0; i < len; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] = 'a' + (str[i] - 'a' + shift) % 26;
+        } else if (str[i] >= 'A' && str[i] <= 'Z') {
+            str[i] = 'A' + (str[i] - 'A' + shift) % 26;
+        }
+    }
+}
+
+// Вывод всех подстрок, заключенных в кавычки
+void printQuotedText(const char* str) {
+    bool inQuotes = false;
+    while (*str != '\0') {
+        if (*str == '"') {
+            inQuotes = !inQuotes;  // Переключаем состояние внутри кавычек
+            if (!inQuotes) {
+                std::cout << std::endl; // Закрытие кавычек завершает вывод
+            }
+        } else if (inQuotes) {
+            std::cout << *str;  // Выводим символы, если они внутри кавычек
+        }
+        str++;
+    }
+}
+
+// Основная функция для тестирования
+int main() {
+    const char* testStr = "madam";
+    const char* text = "Find the \"quoted text\" in this \"example text\".";
+
+    std::cout << "Is palindrome: " << (isPalindrome(testStr) ? "Yes" : "No") << std::endl;
+
+    const char* mainStr = "Hello, this is a test string.";
+    const char* substr = "test";
+    int pos = findSubstring(mainStr, substr);
+    std::cout << "Substring \"" << substr << "\" found at position: " << pos << std::endl;
+
+    char encryptStr[] = "EncryptMe";
+    int shift = 3;
+    caesarCipher(encryptStr, shift);
+    std::cout << "Caesar Cipher: " << encryptStr << std::endl;
+
+    std::cout << "Quoted text in string: ";
+    printQuotedText(text);
+
+    return 0;
+}
