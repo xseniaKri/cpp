@@ -23,23 +23,20 @@ int Matrix::get_rows() const {
 int Matrix::get_columns() const {
     return columns;
 }
-
+// Проверка индекса элемента
+bool Matrix::true_index(int i, int j) const {
+    if (i >= rows || j >= columns) {
+        return false;
+    }
+    else return true;
+} 
 // Получение элемента матрицы
 double Matrix::get_elem(int i, int j) const {
-    if (i >= rows || j >= columns) {
-        throw std::out_of_range("Index out of range");
+    if (! true_index(i, j)) {
+        cout << "Index out of range";
     }
-    return data[i * columns + j];
+    else return data[i * columns + j];
 }
-
-// Установка элемента матрицы
-void Matrix::set_elem(int i, int j, double value) {
-    if (i >= rows || j >= columns) {
-        throw std::out_of_range("Index out of range");
-    }
-    data[i * columns + j] = value;
-}
-
 // Ввод элементов матрицы с клавиатуры
 void Matrix::input() {
     for (int i = 0; i < rows; i++) {
@@ -63,30 +60,34 @@ void Matrix::print() const {
 // Сложение матриц
 Matrix* Matrix::sum(const Matrix* mat2) {
     if (rows != mat2->rows || columns != mat2->columns) {
-        throw std::invalid_argument("Matrices must be of the same size for addition");
+        cout << "Matrices must be of the same size for addition";
     }
-    Matrix* result = new Matrix(rows, columns);
-    for (int i = 0; i < rows * columns; i++) {
-        result->data[i] = data[i] + mat2->data[i];
+    else {
+        Matrix* result = new Matrix(rows, columns);
+        for (int i = 0; i < rows * columns; i++) {
+            result->data[i] = data[i] + mat2->data[i];
+        }
+        return result;
     }
-    return result;
 }
 
 // Умножение матриц
 Matrix* Matrix::mult(const Matrix* mat2) {
     if (columns != mat2->rows) {
-        throw std::invalid_argument("Number of columns of the first matrix must match the number of rows of the second matrix");
+        cout << "Number of columns of the first matrix must match the number of rows of the second matrix";
     }
-    Matrix* result = new Matrix(rows, mat2->columns);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < mat2->columns; j++) {
-            result->data[i * mat2->columns + j] = 0;
-            for (int k = 0; k < columns; k++) {
-                result->data[i * mat2->columns + j] += data[i * columns + k] * mat2->data[k * mat2->columns + j];
+    else {
+        Matrix* result = new Matrix(rows, mat2->columns);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < mat2->columns; j++) {
+                result->data[i * mat2->columns + j] = 0;
+                for (int k = 0; k < columns; k++) {
+                    result->data[i * mat2->columns + j] += data[i * columns + k] * mat2->data[k * mat2->columns + j];
+                }
             }
         }
+        return result;
     }
-    return result;
 }
 
 // Умножение матрицы на число
@@ -101,21 +102,23 @@ Matrix* Matrix::mult_by_num(double num) {
 // След матрицы (сумма элементов на главной диагонали)
 double Matrix::trace() {
     if (rows != columns) {
-        throw std::invalid_argument("Matrix must be square to calculate the trace");
+        cout << "Matrix must be square to calculate the trace";
     }
-    double trace_sum = 0;
-    for (int i = 0; i < rows; i++) {
-        trace_sum += data[i * columns + i];
+    else {
+        double trace_sum = 0;
+        for (int i = 0; i < rows; i++) {
+            trace_sum += data[i * columns + i];
+        }
+        return trace_sum;
     }
-    return trace_sum;
 }
 
 // Определитель матрицы (рекурсивный метод)
 double Matrix::det() {
     if (rows != columns) {
-        throw std::invalid_argument("The determinant can only be calculated for a square matrix");
+        cout << "The determinant can only be calculated for a square matrix";
     }
-    return determinant(data, rows);
+    else return determinant(data, rows);
 }
 
 double Matrix::determinant(double* arr, int n) {

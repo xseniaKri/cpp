@@ -22,5 +22,5 @@ public:
     int get_columns() const;
     int get_rows() const;
     double get_elem(int i, int j) const;
-    void set_elem(int i, int j, double value); 
+    bool true_index(int i, int j) const;
 };
