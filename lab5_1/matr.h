@@ -5,11 +5,10 @@ private:
     int rows; // количество строк
     int columns; // количество столбцов
     double* data; // указатель на двумерный динамический массив для хранения элементов
-    double determinant(double** arr, int n);
+    double determinant(double* arr, int n);
 public:
     // Конструкторы и деструктор
     Matrix(int rows, int columns);
-    Matrix(const Matrix& other);
     ~Matrix();
 
     // Методы класса

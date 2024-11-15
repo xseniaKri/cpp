@@ -5,49 +5,47 @@ using std::cout;
 using std::endl;
 
 // Конструктор: инициализация матрицы заданного размера
-Matrix::Matrix(int rows, int columns) : rows(rows), columns(columns) {
-    // Выделение памяти для двумерного массива
-    data = new double*[rows];
-    for (int i = 0; i < rows; i++) {
-        data[i] = new double[columns]();
-    }
+Matrix::Matrix(int rows, int columns) {
+    this->rows = rows; 
+    this->columns = columns; 
+    data = new double[rows * columns]();
 }
 
 // Деструктор: освобождение памяти
 Matrix::~Matrix() {
-    for (int i = 0; i < rows; i++) {
-        delete[] data[i];
-    }
     delete[] data;
 }
 
 // Получение количества строк и столбцов
 int Matrix::get_rows() const {
-    return rows; 
+    return rows;
 }
 int Matrix::get_columns() const {
     return columns;
-    }
+}
 
 // Получение элемента матрицы
 double Matrix::get_elem(int i, int j) const {
-    if (i >= rows || j >= columns) cout << "Index out of range" << endl;
-    else return data[i][j];
+    if (i >= rows || j >= columns) {
+        throw std::out_of_range("Index out of range");
+    }
+    return data[i * columns + j];
 }
 
 // Установка элемента матрицы
 void Matrix::set_elem(int i, int j, double value) {
-    if (i >= rows || j >= columns) cout << "Index out of range" << endl;
-    else data[i][j] = value;
+    if (i >= rows || j >= columns) {
+        throw std::out_of_range("Index out of range");
+    }
+    data[i * columns + j] = value;
 }
 
 // Ввод элементов матрицы с клавиатуры
 void Matrix::input() {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            printf("Enter element [ %d ][ %d ]", i, j);
-            //cout << "Введите элемент [" << i << "][" << j << "]: ";
-            cin >> data[i][j];
+            cout << "Enter element [" << i << "][" << j << "]: ";
+            cin >> data[i * columns + j];
         }
     }
 }
@@ -56,7 +54,7 @@ void Matrix::input() {
 void Matrix::print() const {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            cout << data[i][j] << " ";
+            cout << data[i * columns + j] << " ";
         }
         cout << endl;
     }
@@ -64,29 +62,27 @@ void Matrix::print() const {
 
 // Сложение матриц
 Matrix* Matrix::sum(const Matrix* mat2) {
-    if (rows != mat2->rows || columns != mat2->columns) //используем -> тк передали указатель на объект
-        cout << "For addition, the matrices must be of the same size";
-
+    if (rows != mat2->rows || columns != mat2->columns) {
+        throw std::invalid_argument("Matrices must be of the same size for addition");
+    }
     Matrix* result = new Matrix(rows, columns);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            result->data[i][j] = data[i][j] + mat2->data[i][j];
-        }
+    for (int i = 0; i < rows * columns; i++) {
+        result->data[i] = data[i] + mat2->data[i];
     }
     return result;
 }
 
 // Умножение матриц
 Matrix* Matrix::mult(const Matrix* mat2) {
-    if (columns != mat2->rows)
-        cout << "The number of columns of the first matrix must be equal to the number of rows of the second matrix";
-
+    if (columns != mat2->rows) {
+        throw std::invalid_argument("Number of columns of the first matrix must match the number of rows of the second matrix");
+    }
     Matrix* result = new Matrix(rows, mat2->columns);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < mat2->columns; j++) {
-            result->data[i][j] = 0;
+            result->data[i * mat2->columns + j] = 0;
             for (int k = 0; k < columns; k++) {
-                result->data[i][j] += data[i][k] * mat2->data[k][j];
+                result->data[i * mat2->columns + j] += data[i * columns + k] * mat2->data[k * mat2->columns + j];
             }
         }
     }
@@ -96,59 +92,50 @@ Matrix* Matrix::mult(const Matrix* mat2) {
 // Умножение матрицы на число
 Matrix* Matrix::mult_by_num(double num) {
     Matrix* result = new Matrix(rows, columns);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            result->data[i][j] = data[i][j] * num;
-        }
+    for (int i = 0; i < rows * columns; i++) {
+        result->data[i] = data[i] * num;
     }
     return result;
 }
 
 // След матрицы (сумма элементов на главной диагонали)
 double Matrix::trace() {
-    if (rows != columns)
-        cout << "Matrix must be square to calculate the trace";
-
+    if (rows != columns) {
+        throw std::invalid_argument("Matrix must be square to calculate the trace");
+    }
     double trace_sum = 0;
     for (int i = 0; i < rows; i++) {
-        trace_sum += data[i][i];
+        trace_sum += data[i * columns + i];
     }
     return trace_sum;
 }
 
 // Определитель матрицы (рекурсивный метод)
 double Matrix::det() {
-    if (rows != columns)
-        cout << "The determinant can only be calculated for a square matrix";
-
+    if (rows != columns) {
+        throw std::invalid_argument("The determinant can only be calculated for a square matrix");
+    }
     return determinant(data, rows);
 }
 
-double Matrix::determinant(double** arr, int n) {
-    if (n == 1) return arr[0][0];
-    if (n == 2) return arr[0][0] * arr[1][1] - arr[0][1] * arr[1][0];
-// При n >= 3 используем разложение по 1-й строке
-    double det = 0;
-    double** submatrix = new double*[n - 1];
-    for (int i = 0; i < n - 1; i++) {
-        submatrix[i] = new double[n - 1];
-    }
+double Matrix::determinant(double* arr, int n) {
+    if (n == 1) return arr[0];
+    if (n == 2) return arr[0] * arr[3] - arr[1] * arr[2];
 
+    double det = 0;
+    double* submatrix = new double[(n - 1) * (n - 1)];
     for (int x = 0; x < n; x++) {
         int subi = 0;
         for (int i = 1; i < n; i++) {
             int subj = 0;
             for (int j = 0; j < n; j++) {
                 if (j == x) continue;
-                submatrix[subi][subj++] = arr[i][j];
+                submatrix[subi * (n - 1) + subj] = arr[i * n + j];
+                subj++;
             }
             subi++;
         }
-        det += (x % 2 == 0 ? 1 : -1) * arr[0][x] * determinant(submatrix, n - 1);
-    }
-
-    for (int i = 0; i < n - 1; i++) {
-        delete[] submatrix[i];
+        det += (x % 2 == 0 ? 1 : -1) * arr[x] * determinant(submatrix, n - 1);
     }
     delete[] submatrix;
     return det;
