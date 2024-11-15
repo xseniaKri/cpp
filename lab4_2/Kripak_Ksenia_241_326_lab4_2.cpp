@@ -52,8 +52,14 @@ char file_disk(const string &file_path_full) {
 // Выход: `true`, если переименование успешно, `false` - в случае неудачи.
 bool file_rename(string *file_path_full, const string &new_name) {
     string path = f_path(*file_path_full);
-    string new_file_path = path + "/" + new_name;
-    if (rename(file_path_full->c_str(), new_file_path.c_str()) == 0) { // стандартная функция C, которая переименовывает файл, в случае успеха возвр. 0
+    string extension = file_format(*file_path_full);
+    string new_file_path = path + (path.empty() ? "" : "\\") + new_name;
+    // Если у файла было расширение, добавляем его к новому имени
+    if (!extension.empty()) {
+        new_file_path += "." + extension;
+    }
+    // Переименование файла
+    if (rename(file_path_full->c_str(), new_file_path.c_str()) == 0) {
         *file_path_full = new_file_path; // Обновляем исходное расположение
         return true;
     }
