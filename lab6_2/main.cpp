@@ -23,7 +23,6 @@ bool close_bracket(char target) {
     int i = 0;
     while (i < 3) {
         if (target == arr[i]) {
-            cout << "Yes!";
             return true;
             break;
         }
@@ -38,12 +37,14 @@ bool check() {
     myStack stack;
     while (temp != '\r') {
         cin >> temp;
+        cout << "a";
         if (open_bracket(temp)) {
             stack.push(temp);
         }
         if (close_bracket(temp)) {
             if ((temp - stack.top() == 1) || (temp - stack.top() == 2)) {
                 char d = stack.pop();
+                continue;
             }
             else {
                 return false;
