@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char value;
+    Node* next;
+
+    void 
+}
+
+class MyStack
