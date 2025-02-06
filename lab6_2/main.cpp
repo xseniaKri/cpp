@@ -3,17 +3,17 @@
 #include <string>
 using namespace std;
 
-// Проверяем, является ли символ открывающей скобкой
+//проверяем что перед нами открывающая скобка
 bool open_bracket(char target) {
     return (target == '{' || target == '[' || target == '(');
 }
 
-// Проверяем, является ли символ закрывающей скобкой
+//проверяем что перед нами закрывающая скобка
 bool close_bracket(char target) {
     return (target == '}' || target == ']' || target == ')');
 }
 
-// Проверяем строку на правильность скобок
+//проверяем строку
 bool check(string line) {
     myStack stack;
 
@@ -25,22 +25,22 @@ bool check(string line) {
         } 
         else if (close_bracket(temp)) {
             if (stack.is_empty()) {
-                return false;  // Если закрывающая скобка без открывающей — ошибка
+                return false;
             }
 
-            char topChar = stack.top();  // Сохраняем верхний элемент перед проверкой
+            char topChar = stack.top();
             
             if ((temp == '}' && topChar == '{') ||
                 (temp == ']' && topChar == '[') ||
                 (temp == ')' && topChar == '(')) {
-                stack.pop();  // Удаляем верхний элемент, так как он образует пару
+                stack.pop();  
             } else {
-                return false;  // Если скобки не совпадают — ошибка
+                return false; 
             }
         }
     }
 
-    return stack.is_empty();  // Если стек пуст — правильная последовательность
+    return stack.is_empty(); 
 }
 
 int main() {
