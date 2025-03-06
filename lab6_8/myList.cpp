@@ -82,10 +82,15 @@ void List::clear() {
 }
 
 void List::print() {
-    Group* temp = head;
-    while (temp) {
-        temp->printStudents();
-        temp = temp->next;
+    if (head == nullptr) {
+        cout << "Список групп пуст\n";
+    }
+    else {
+        Group* temp = head;
+        while (temp) {
+            temp->printStudents();
+            temp = temp->next;
+        }
     }
 }
 
