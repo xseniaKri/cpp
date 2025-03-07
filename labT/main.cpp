@@ -31,19 +31,19 @@ void quicksort(vector<T>& arr, int low, int high, bool (*compare)(const T&, cons
     }
 }
 
-// ==================== Структура Person ====================
+// ==================== Структура Human ====================
 
-struct Person {
+struct Human {
     string surname;
     string name;
     int age;
-    Person(string s, string n, int a) : surname(s), name(n), age(a) {}
+    Human(string s, string n, int a) : surname(s), name(n), age(a) {}
 };
 
 // Функции сравнения
-bool compareBySurname(const Person& a, const Person& b) { return a.surname < b.surname; }
-bool compareByName(const Person& a, const Person& b) { return a.name < b.name; }
-bool compareByAge(const Person& a, const Person& b) { return a.age < b.age; }
+bool compareBySurname(const Human& a, const Human& b) { return a.surname < b.surname; }
+bool compareByName(const Human& a, const Human& b) { return a.name < b.name; }
+bool compareByAge(const Human& a, const Human& b) { return a.age < b.age; }
 
 // ==================== Функции сравнения для базовых типов ====================
 
@@ -60,7 +60,7 @@ void printArray(const vector<T>& arr) {
     cout << endl;
 }
 
-void printArray(const vector<Person>& arr) {
+void printArray(const vector<Human>& arr) {
     for (const auto& el : arr) {
         cout << el.surname << " " << el.name << " " << el.age << endl;
     }
@@ -124,8 +124,8 @@ void testSortingBooleans() {
     printArray(bools);
 }
 
-void testSortingPersons() {
-    vector<Person> people = {
+void testSortingHumans() {
+    vector<Human> people = {
         Person("Ivanov", "Ivan", 30),
         Person("Petrov", "Petr", 25),
         Person("Sidorov", "Semen", 35),

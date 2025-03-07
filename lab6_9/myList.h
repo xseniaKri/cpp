@@ -10,10 +10,10 @@ struct Student {
 };
 
 struct Group {
-    int number;
+    std::string number;
     Student* students;
     Group* next;
-    Group(int num);
+    Group(const std::string& num);
     void addStudent(const std::string& surname);
     void printStudents();
 };
@@ -23,10 +23,10 @@ private:
     Group* head;
 public:
     List();
-    void addStudent(int groupNumber, const std::string& surname);
+    void addStudent(const std::string& groupNumber, const std::string& surname);
     void print();
     void clear();
-    void push(int groupNumber, const std::string& surname);
+    void push(const std::string& groupNumber, const std::string& surname);
     void pop();
     Group* get_head() const;
     ~List();
